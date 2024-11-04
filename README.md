@@ -1,1 +1,1 @@
-#Genshin Impact Android Application
+## Genshin Impact Android Application
