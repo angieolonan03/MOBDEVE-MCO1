@@ -75,6 +75,68 @@ public class WeaponData {
         weaponList.add(new WeaponData("Staff of Homa", R.drawable.homa,
                 character3RefineRequirements, 9000, 1800));
 
+        // New weapon: Skyward Harp
+        Map<String, Integer> harpRefineRequirements = new HashMap<>();
+        harpRefineRequirements.put("Silver", 6);
+        harpRefineRequirements.put("Crystal Chunk", 12);
+        harpRefineRequirements.put("Weapon Material 1", 3);
+        harpRefineRequirements.put("Weapon Material 2", 4);
+
+        weaponList.add(new WeaponData("Skyward Harp", R.drawable.skywardharp,
+                harpRefineRequirements, 11000, 2500));
+
+        // New weapon: Wolf's Gravestone
+        Map<String, Integer> wolfRefineRequirements = new HashMap<>();
+        wolfRefineRequirements.put("Silver", 7);
+        wolfRefineRequirements.put("Crystal Chunk", 15);
+        wolfRefineRequirements.put("Weapon Material 1", 4);
+        wolfRefineRequirements.put("Weapon Material 2", 5);
+
+        weaponList.add(new WeaponData("Wolf's Gravestone", R.drawable.wolfsgravestone,
+                wolfRefineRequirements, 12000, 3000));
+
+        Map<String, Integer> freedomSwornRefineRequirements = new HashMap<>();
+        freedomSwornRefineRequirements.put("Silver", 5);
+        freedomSwornRefineRequirements.put("Crystal Chunk", 14);
+        freedomSwornRefineRequirements.put("Weapon Material 1", 2);
+        freedomSwornRefineRequirements.put("Weapon Material 2", 3);
+        weaponList.add(new WeaponData("Freedom-Sworn", R.drawable.freedom,
+                freedomSwornRefineRequirements, 15000, 3500));
+
+        Map<String, Integer> thunderingPulseRefineRequirements = new HashMap<>();
+        thunderingPulseRefineRequirements.put("Silver", 8);
+        thunderingPulseRefineRequirements.put("Crystal Chunk", 18);
+        thunderingPulseRefineRequirements.put("Weapon Material 1", 3);
+        thunderingPulseRefineRequirements.put("Weapon Material 2", 4);
+        weaponList.add(new WeaponData("Thundering Pulse", R.drawable.thundering,
+                thunderingPulseRefineRequirements, 20000, 4000));
+
+        Map<String, Integer> engulfingLightningRefineRequirements = new HashMap<>();
+        engulfingLightningRefineRequirements.put("Silver", 6);
+        engulfingLightningRefineRequirements.put("Crystal Chunk", 16);
+        engulfingLightningRefineRequirements.put("Weapon Material 1", 4);
+        engulfingLightningRefineRequirements.put("Weapon Material 2", 2);
+        weaponList.add(new WeaponData("Engulfing Lightning", R.drawable.engulfing,
+                engulfingLightningRefineRequirements, 18000, 3700));
+
+        Map<String, Integer> elegyRefineRequirements = new HashMap<>();
+        elegyRefineRequirements.put("Silver", 9);
+        elegyRefineRequirements.put("Crystal Chunk", 20);
+        elegyRefineRequirements.put("Weapon Material 1", 5);
+        elegyRefineRequirements.put("Weapon Material 2", 4);
+        weaponList.add(new WeaponData("Elegy for the End", R.drawable.elegy,
+                elegyRefineRequirements, 25000, 5000));
+
+        Map<String, Integer> vortexVanquisherRefineRequirements = new HashMap<>();
+        vortexVanquisherRefineRequirements.put("Silver", 7);
+        vortexVanquisherRefineRequirements.put("Crystal Chunk", 19);
+        vortexVanquisherRefineRequirements.put("Weapon Material 1", 4);
+        vortexVanquisherRefineRequirements.put("Weapon Material 2", 5);
+        weaponList.add(new WeaponData("Vortex Vanquisher", R.drawable.vortex,
+                vortexVanquisherRefineRequirements, 22000, 4500));
+
+
+
         return weaponList;
     }
 }
