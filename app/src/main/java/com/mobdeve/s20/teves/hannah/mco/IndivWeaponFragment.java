@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,9 +16,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mobdeve.s20.teves.hannah.mco.network.GenshinListApi;
+import com.mobdeve.s20.teves.hannah.mco.network.RetrofitClient;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class IndivWeaponFragment extends Fragment {
 
@@ -47,15 +54,13 @@ public class IndivWeaponFragment extends Fragment {
         refineMaterialsSection = view.findViewById(R.id.refineMaterialsSection);
         recyclerView = view.findViewById(R.id.refineRecyclerView);
 
-        // Initialize RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Get weapon data from arguments
+        // Get weapon name from arguments
         Bundle args = getArguments();
         if (args != null) {
             String weaponName = args.getString("WEAPON_NAME");
-            WeaponData weaponData = getWeaponDataByName(weaponName);
-            displayWeaponData(weaponData);
+            fetchWeaponDataByName(weaponName);
         }
 
         // Set OnClickListener to toggle visibility of refine materials
@@ -74,43 +79,51 @@ public class IndivWeaponFragment extends Fragment {
 
     private void toggleRefineMaterialsVisibility() {
         if (isRefineSectionVisible) {
-            // Hide the refine materials section
             refineMaterialsSection.setVisibility(View.GONE);
             refineArrow.setImageResource(R.drawable.ic_arrow_down); // Arrow points down when collapsed
         } else {
-            // Show the refine materials section
             refineMaterialsSection.setVisibility(View.VISIBLE);
             refineArrow.setImageResource(R.drawable.ic_arrow_up); // Arrow points up when expanded
         }
         isRefineSectionVisible = !isRefineSectionVisible; // Toggle state
     }
 
-    private WeaponData getWeaponDataByName(String weaponName) {
-        List<WeaponData> allWeaponData = WeaponData.getWeaponData();
-        for (WeaponData data : allWeaponData) {
-            if (data.name.equals(weaponName)) {
-                return data;
+    private void fetchWeaponDataByName(String weaponName) {
+        GenshinListApi genshinListApi = RetrofitClient.getGenshinListApi();
+
+        genshinListApi.getWeapons().enqueue(new Callback<List<WeaponData>>() {
+            @Override
+            public void onResponse(Call<List<WeaponData>> call, Response<List<WeaponData>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<WeaponData> weaponDataList = response.body();
+                    for (WeaponData weaponData : weaponDataList) {
+                        if (weaponData.name.equalsIgnoreCase(weaponName)) {
+                            displayWeaponData(weaponData);
+                            return;
+                        }
+                    }
+                    Toast.makeText(getContext(), "Weapon not found", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Failed to fetch weapon details", Toast.LENGTH_SHORT).show();
+                }
             }
-        }
-        return null;
+
+            @Override
+            public void onFailure(Call<List<WeaponData>> call, Throwable t) {
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void displayWeaponData(WeaponData weaponData) {
         if (weaponData != null) {
             nameHolder.setText(weaponData.name);
-            imgHolder.setImageResource(weaponData.getWeaponImg());
+            imgHolder.setImageResource(weaponData.getWeaponImage()); // Map to local drawable
 
-            // Convert refine requirements to list of RefineMaterial
+            // Since API doesn't provide refinement data, handle gracefully
             refineMaterialList = new ArrayList<>();
-
-            // Add refine requirements from the map
-            for (Map.Entry<String, Integer> entry : weaponData.refineRequirements.entrySet()) {
-                refineMaterialList.add(new RefineMaterialData(entry.getKey(), entry.getValue()));
-            }
-
-            // Add Mora and Crystals as extra refine materials
-            refineMaterialList.add(new RefineMaterialData("Total Mora", weaponData.refineMora));
-            refineMaterialList.add(new RefineMaterialData("Total Crystals", weaponData.refineCrystal));
+            refineMaterialList.add(new RefineMaterialData("Base Attack", weaponData.atk)); // Example of static data
+            refineMaterialList.add(new RefineMaterialData("Rarity", Integer.parseInt(weaponData.rarity))); // Example
 
             // Initialize and set the adapter
             adapter = new RefineMaterialAdapter(refineMaterialList);

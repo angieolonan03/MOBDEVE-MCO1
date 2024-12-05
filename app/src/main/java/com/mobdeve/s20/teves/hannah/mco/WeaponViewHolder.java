@@ -5,15 +5,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 public class WeaponViewHolder extends RecyclerView.ViewHolder {
-    // TextView for character name
     TextView weaponName;
     ImageView weaponImg;
-
-    // View reference
     View view;
 
-    // Constructor
     public WeaponViewHolder(View itemView) {
         super(itemView);
         this.weaponName = itemView.findViewById(R.id.weaponName);
@@ -21,14 +19,17 @@ public class WeaponViewHolder extends RecyclerView.ViewHolder {
         this.view = itemView;
     }
 
-    // Method to bind character list data
     public void bindWeapon(WeaponData weaponData) {
         weaponName.setText(weaponData.name);
-        weaponImg.setImageResource(weaponData.getWeaponImg());
-    }
 
-    public void bindIndividualWeapon(WeaponData weaponData) {
-        weaponName.setText(weaponData.name);
-        weaponImg.setImageResource(weaponData.getWeaponImg());
+        // Load weapon image
+        int weaponImageResId = weaponData.getWeaponImage(); // Map name to local drawable
+        if (weaponImageResId != 0) {
+            weaponImg.setImageResource(weaponImageResId); // Load from drawable
+        } else {
+            Glide.with(view.getContext())
+                    .load(R.drawable.placeholder) // Fallback image if no mapping exists
+                    .into(weaponImg);
+        }
     }
 }

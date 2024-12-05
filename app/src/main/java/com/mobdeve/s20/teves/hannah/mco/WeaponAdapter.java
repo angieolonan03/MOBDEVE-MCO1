@@ -33,7 +33,7 @@ public class WeaponAdapter extends RecyclerView.Adapter<WeaponViewHolder> {
         WeaponData weaponData = weaponDataList.get(position);
 
         if (isDetailView) {
-            holder.bindIndividualWeapon(weaponData);
+            holder.bindWeapon(weaponData);
         } else {
             holder.bindWeapon(weaponData);
             holder.view.setOnClickListener(v -> {
